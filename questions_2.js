@@ -110,14 +110,14 @@ const questions_2 = {
 };
 
 const questionsMap = {
-  1: { label: 'Lovers', questions: 'lovers' },
-  2: { label: 'Best Friends', questions: 'bestFriends' },
-  3: { label: 'Mom or Dad', questions: 'momOrDad' },
-  4: { label: 'Bros', questions: 'bros' },
-  5: { label: 'Sisters', questions: 'sisters' },
-  6: { label: 'Roommates', questions: 'roommates' },
-  7: { label: 'Work Buddies', questions: 'workBuddies' },
-  8: { label: 'Newlyweds', questions: 'newlyweds' },
-  9: { label: 'Married Couple', questions: 'marriedCouple' }
+  1: { label: '❤️ Lovers', questions: 'lovers' },
+  2: { label: '👯‍♂️ Best Friends', questions: 'bestFriends' },
+  3: { label: '👨‍👩‍👧 Mom or Dad', questions: 'momOrDad' },
+  4: { label: '🧔 Bros', questions: 'bros' },
+  5: { label: '👩 Sisters', questions: 'sisters' },
+  6: { label: '🏠 Roommates', questions: 'roommates' },
+  7: { label: '💼 Work Buddies', questions: 'workBuddies' },
+  8: { label: '💍 Newlyweds', questions: 'newlyweds' },
+  9: { label: '👫 Married Couple', questions: 'marriedCouple' }
 };
 
