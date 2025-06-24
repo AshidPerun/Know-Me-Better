@@ -30,12 +30,8 @@
         <section id="typeSelectionScreen">
             <h3 class="sectionTitle">Select Quiz Type</h3>
             <div class="screenContent">
-                <div class="selctionContainer">
-                    <h3 onclick="onTypeSelect(1)">Basic</h3>
-                    <h3 onclick="onTypeSelect(2)">Funny</h3>
-                    <h3 onclick="onTypeSelect(3)">Opinion</h3>
-                    <h3 onclick="onTypeSelect(4)">Relationship Memories</h3>
-                    <h3 onclick="onTypeSelect(5)">Mix</h3>
+                <div id="selectionContainer" class="selctionContainer">
+                    <!-- Buttons will be injected here -->
                 </div>
             </div>
             <div class="button" onclick="onGameSetup()">
@@ -186,6 +182,7 @@
     </div>
 
     <script src="./questions.js"></script>
+    <script src="./questions_2.js"></script>
     <script src="./libs/peerjs.min.js"></script>
     <script src="./connection.js"></script>
     <script src="./cofetti.js"></script>

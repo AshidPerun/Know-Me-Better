@@ -9,6 +9,8 @@ const correctWrong = document.getElementById('correctWrong');
 const scoreHtml = document.getElementById('score');
 const winnerName = document.getElementById('winnerName');
 const winnerIs = document.getElementById('winnerIs');
+const selectionContainer = document.getElementById('selectionContainer');
+
 
 let currentScreenId = 'startScreen';
 let quizType = 0;
@@ -41,6 +43,14 @@ document.addEventListener('DOMContentLoaded', () => {
             section.classList.remove('active');
         }
     });
+});
+
+Object.entries(questionsMap).forEach(([key, { label }]) => {
+    const h3 = document.createElement('h3');
+    h3.innerText = label;
+    h3.onclick = () => onTypeSelect(Number(key));
+    
+    selectionContainer.appendChild(h3);
 });
 
 document.querySelectorAll('.selctionContainer h3').forEach(item => {
@@ -160,10 +170,11 @@ function generateQuiz() {
         return;
     }
 
-    let quiz = questions[Math.floor(Math.random() * questions.length)];
+    const typeQuections = questions_2[questionsMap[quizType].questions];
+    let quiz = typeQuections[Math.floor(Math.random() * typeQuections.length)];
 
     while(quiz == currentQuiz){
-        quiz = questions[Math.floor(Math.random() * questions.length)];
+        quiz = typeQuections[Math.floor(Math.random() * typeQuections.length)];
     }
 
     setQuiz(quiz, round);
