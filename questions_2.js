@@ -120,4 +120,3 @@ const questionsMap = {
   8: { label: '💍 Newlyweds', questions: 'newlyweds' },
   9: { label: '👫 Married Couple', questions: 'marriedCouple' }
 };
-
