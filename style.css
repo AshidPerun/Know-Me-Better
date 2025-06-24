@@ -87,6 +87,7 @@ section.active {
   flex-wrap: wrap;
   justify-content: center;
   gap: 1rem;
+  max-width: 50rem;
   margin-top: 2rem;
   padding: 1rem;
   border-radius: 1rem;
