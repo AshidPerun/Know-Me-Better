@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG Confetti Animation (Corrected)</title>
+    <style>
+        body {
+            background-color: #1a1a2e;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        h1 {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 5vw;
+            text-align: center;
+            z-index: 10;
+        }
+
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @keyframes fall {
+            0% {
+                opacity: 1;
+                /* The transform no longer needs a starting translateX */
+                transform: translateY(0) rotate(0deg);
+            }
+
+            100% {
+                opacity: 0.5;
+                transform: translateY(110vh) rotate(1080deg);
+            }
+        }
+
+        .confetti {
+            animation-name: fall;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+            opacity: 0;
+            /* NOTE: All the individual translateX rules are GONE from here */
+        }
+
+        /* 1. Different Colors (This section is unchanged) */
+        .confetti:nth-of-type(7n) {
+            fill: #fcf403;
+        }
+
+        .confetti:nth-of-type(7n + 1) {
+            fill: #62cf39;
+        }
+
+        .confetti:nth-of-type(7n + 2) {
+            fill: #ff68a5;
+        }
+
+        .confetti:nth-of-type(7n + 3) {
+            fill: #20c2e0;
+        }
+
+        .confetti:nth-of-type(7n + 4) {
+            fill: #ffb33f;
+        }
+
+        .confetti:nth-of-type(7n + 5) {
+            fill: #a562ff;
+        }
+
+        .confetti:nth-of-type(7n + 6) {
+            fill: #f9423a;
+        }
+
+        /* 2. Different Animation Durations (This section is unchanged) */
+        .confetti:nth-of-type(3n) {
+            animation-duration: 8s;
+        }
+
+        .confetti:nth-of-type(3n + 1) {
+            animation-duration: 6s;
+        }
+
+        .confetti:nth-of-type(3n + 2) {
+            animation-duration: 10s;
+        }
+
+        /* 3. Different Animation Delays (This section is unchanged) */
+        .confetti:nth-of-type(1) {
+            animation-delay: -3s;
+        }
+
+        .confetti:nth-of-type(2) {
+            animation-delay: -5s;
+        }
+
+        .confetti:nth-of-type(3) {
+            animation-delay: -2s;
+        }
+
+        .confetti:nth-of-type(4) {
+            animation-delay: -4s;
+        }
+
+        .confetti:nth-of-type(5) {
+            animation-delay: -6s;
+        }
+
+        .confetti:nth-of-type(6) {
+            animation-delay: -1s;
+        }
+
+        .confetti:nth-of-type(7) {
+            animation-delay: -7s;
+        }
+
+        .confetti:nth-of-type(8) {
+            animation-delay: -3.5s;
+        }
+
+        .confetti:nth-of-type(9) {
+            animation-delay: -1.5s;
+        }
+
+        .confetti:nth-of-type(10) {
+            animation-delay: -4.5s;
+        }
+
+        .confetti:nth-of-type(11) {
+            animation-delay: -2.5s;
+        }
+
+        .confetti:nth-of-type(12) {
+            animation-delay: -8s;
+        }
+
+        .confetti:nth-of-type(13) {
+            animation-delay: -1s;
+        }
+
+        .confetti:nth-of-type(14) {
+            animation-delay: -5.5s;
+        }
+
+        .confetti:nth-of-type(15) {
+            animation-delay: -0.5s;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>CONFETTI!</h1>
+
+    <svg class="confetti-container" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <rect id="confetti-rect" width="10" height="20" rx="2" ry="2"></rect>
+            <path id="confetti-squiggle" d="M10,50 Q25,25 40,50 T70,50" stroke-width="5" fill="none"></path>
+        </defs>
+
+        <!-- THE FIX IS HERE: We set the starting 'x' position for each piece -->
+        <use class="confetti" href="#confetti-rect" x="10%" />
+        <use class="confetti" href="#confetti-squiggle" x="20%" />
+        <use class="confetti" href="#confetti-rect" x="30%" />
+        <use class="confetti" href="#confetti-squiggle" x="40%" />
+        <use class="confetti" href="#confetti-rect" x="50%" />
+        <use class="confetti" href="#confetti-squiggle" x="60%" />
+        <use class="confetti" href="#confetti-rect" x="70%" />
+        <use class="confetti" href="#confetti-squiggle" x="80%" />
+        <use class="confetti" href="#confetti-rect" x="90%" />
+        <use class="confetti" href="#confetti-squiggle" x="25%" />
+        <use class="confetti" href="#confetti-rect" x="35%" />
+        <use class="confetti" href="#confetti-squiggle" x="45%" />
+        <use class="confetti" href="#confetti-rect" x="55%" />
+        <use class="confetti" href="#confetti-squiggle" x="65%" />
+        <use class="confetti" href="#confetti-rect" x="75%" />
+    </svg>
+</body>
+
+</html>

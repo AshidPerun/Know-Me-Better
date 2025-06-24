@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Know Me Better</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <main id="appContainer"> <!-- ADDED THIS WRAPPER -->
+        <section id="startScreen" class="active">
+            <h3 class="mainTitle">Know Me Better</h3>
+            <div class="inputWrapper">
+                <label for="nameInput">Enter your name</label>
+                <input autocomplete="off" type="text" id="nameInput" placeholder="Your name here..." />
+            </div>
+            <div submit id="startButton" class="button" onclick="startGame()">
+                Start
+            </div>
+        </section>
+        <section id="typeSelectionScreen">
+            <h3 class="sectionTitle">Select Quiz Type</h3>
+            <div class="screenContent">
+                <div class="selctionContainer">
+                    <h3 onclick="onTypeSelect(1)">Basic</h3>
+                    <h3 onclick="onTypeSelect(2)">Funny</h3>
+                    <h3 onclick="onTypeSelect(3)">Opinion</h3>
+                    <h3 onclick="onTypeSelect(4)">Relationship Memories</h3>
+                    <h3 onclick="onTypeSelect(5)">Mix</h3>
+                </div>
+            </div>
+            <div class="button" onclick="onGameSetup()">
+                Choose & Continue
+            </div>
+        </section>
+        <section id="inviteScreen">
+            <h3 class="sectionTitle">Invite your Friend</h3>
+            <div class="screenContent">
+                <h3>Share Link to your friend...</h3>
+            </div>
+            <div class="button" onclick="inviteFriend()">Copy Link</div>
+        </section>
+        <section id="waitingScreen">
+            <h3 class="sectionTitle">Waiting for your friend...</h3>
+            <div class="screenContent">
+                <h3>Share Link to your friend...</h3>
+            </div>
+            <div class="button" onclick="inviteFriend()">Copy Link</div>
+        </section>
+        <section id="friendConnectedScreen">
+            <h3 class="sectionTitle">Friend Connected...</h3>
+            <div class="screenContent">
+                <h3 id="joinedFriendName">Name : </h3>
+            </div>
+            <div class="button" onclick="acceptFriend()">Accept</div>
+        </section>
+        <section id="beforeQuestionScreen">
+            <h3 id="questionNumber" class="sectionTitle">Question</h3>
+            <div class="screenContent">
+                <h3 class="questionArea">Get Ready !</h3>
+            </div>
+        </section>
+        <section id="questionScreen">
+            <h3 class="sectionTitle">Question Time!</h3>
+            <div class="screenContent">
+                <h3 class="questionArea" id="questionArea">Here's a question...</h3>
+            </div>
+            <div class="inputWrapper">
+                <label for="answerInput">Enter your Answer:</label>
+                <input autocomplete="off" type="text" id="answerInput" placeholder="Your Answer here..." />
+            </div>
+            <div class="button" onclick="submitAnswer()">Submit Answer</div>
+        </section>
+        <section id="reviewScreen">
+            <h3 class="sectionTitle">Review Your Answers</h3>
+            <div class="screenContent">
+                <h3 class="questionArea" id="questionArea_2">Here's a question...</h3>
+                <p class="plainText">Your Friend Guess this...</p>
+                <p id="friendsGuess" class="plainText"></p>
+            </div>
+            <div class="rowContent">
+                <div class="button buttonGreen" onclick="submitReview(true)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+                        <path
+                            d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+                    </svg>
+                    Correct
+                </div>
+                <div class="button buttonRed" onclick="submitReview(false)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-x-circle-fill" viewBox="0 0 16 16">
+                        <path
+                            d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z" />
+                    </svg>
+                    Wrong
+                </div>
+            </div>
+        </section>
+        <section id="correctWrongScreen">
+            <h3 id="correctWrong" class="sectionTitle">Correct / Wrong</h3>
+            <p id="score">Results details...</p>
+            <div class="button" onclick="submitReadyNextQuiz()">Next</div>
+        </section>
+        <section id="winnerScreen">
+            <h3 id="winnerIs" class="sectionTitle">And the Winner Is...</h3>
+            <svg class="confetti-svg" viewBox="-250 -250 500 500" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <rect id="confetti-rect" width="8" height="15" rx="2" ry="2"></rect>
+                    <circle id="confetti-circle" r="5"></circle>
+                    <polygon id="confetti-triangle" points="0,0 10,0 5,10"></polygon>
+                </defs>
+                <g id="confetti-group"></g>
+            </svg>
+            <p id="winnerName" class="sectionTitle"></p>
+            <div class="button" onclick="startQuiz()">Play Again</div>
+        </section>
+        <section id="inGameWaitingScreen">
+            <h3 class="sectionTitle">Waiting for your Friend...</h3>
+            <svg width="60" height="60" viewBox="0 0 38 38">
+                <g transform="translate(19 19)">
+                    <g transform="rotate(0)">
+                        <circle cx="0" cy="12" r="3" fill="#60A5FA" opacity="0.125">
+                            <animate attributeName="opacity" from="0.125" to="0.125" dur="1.2s" begin="0s"
+                                repeatCount="indefinite" keyTimes="0;1" values="1;0.125"></animate>
+                        </circle>
+                    </g>
+                    <g transform="rotate(45)">
+                        <circle cx="0" cy="12" r="3" fill="#60A5FA" opacity="0.25">
+                            <animate attributeName="opacity" from="0.25" to="0.25" dur="1.2s" begin="0.15s"
+                                repeatCount="indefinite" keyTimes="0;1" values="1;0.25"></animate>
+                        </circle>
+                    </g>
+                    <g transform="rotate(90)">
+                        <circle cx="0" cy="12" r="3" fill="#60A5FA" opacity="0.375">
+                            <animate attributeName="opacity" from="0.375" to="0.375" dur="1.2s" begin="0.3s"
+                                repeatCount="indefinite" keyTimes="0;1" values="1;0.375"></animate>
+                        </circle>
+                    </g>
+                    <g transform="rotate(135)">
+                        <circle cx="0" cy="12" r="3" fill="#60A5FA" opacity="0.5">
+                            <animate attributeName="opacity" from="0.5" to="0.5" dur="1.2s" begin="0.44999999999999996s"
+                                repeatCount="indefinite" keyTimes="0;1" values="1;0.5"></animate>
+                        </circle>
+                    </g>
+                    <g transform="rotate(180)">
+                        <circle cx="0" cy="12" r="3" fill="#60A5FA" opacity="0.625">
+                            <animate attributeName="opacity" from="0.625" to="0.625" dur="1.2s" begin="0.6s"
+                                repeatCount="indefinite" keyTimes="0;1" values="1;0.625"></animate>
+                        </circle>
+                    </g>
+                    <g transform="rotate(225)">
+                        <circle cx="0" cy="12" r="3" fill="#60A5FA" opacity="0.75">
+                            <animate attributeName="opacity" from="0.75" to="0.75" dur="1.2s" begin="0.75s"
+                                repeatCount="indefinite" keyTimes="0;1" values="1;0.75"></animate>
+                        </circle>
+                    </g>
+                    <g transform="rotate(270)">
+                        <circle cx="0" cy="12" r="3" fill="#60A5FA" opacity="0.875">
+                            <animate attributeName="opacity" from="0.875" to="0.875" dur="1.2s"
+                                begin="0.8999999999999999s" repeatCount="indefinite" keyTimes="0;1" values="1;0.875">
+                            </animate>
+                        </circle>
+                    </g>
+                    <g transform="rotate(315)">
+                        <circle cx="0" cy="12" r="3" fill="#60A5FA" opacity="1">
+                            <animate attributeName="opacity" from="1" to="1" dur="1.2s" begin="1.05s"
+                                repeatCount="indefinite" keyTimes="0;1" values="1;1"></animate>
+                        </circle>
+                    </g>
+                </g>
+            </svg>
+        </section>
+    </main> <!-- /appContainer -->
+    <div id="alertBox" class="alert">
+        Copied to clipboard!
+    </div>
+
+    <script src="./questions.js"></script>
+    <script src="./libs/peerjs.min.js"></script>
+    <script src="./connection.js"></script>
+    <script src="./cofetti.js"></script>
+    <script src="./script.js"></script>
+</body>
+
+</html>

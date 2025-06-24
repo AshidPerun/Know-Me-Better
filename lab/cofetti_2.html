@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG Confetti Burst Animation</title>
+    <style>
+        body {
+            background-color: #0f0f10;
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
+            text-align: center;
+        }
+
+        /* The SVG is positioned in the center */
+        .confetti-svg {
+            width: 80vw;
+            height: 80vh;
+            /* Make the origin (0,0) of the SVG coordinate system be in the center */
+            overflow: visible;
+        }
+
+        /* Keyframe for the burst animation */
+        @keyframes burst {
+            0% {
+                /* Start small, at the origin, and fully opaque */
+                transform: translate(0, 0) rotate(0deg) scale(0);
+                opacity: 1;
+            }
+
+            100% {
+                /* Move to a random final position, rotate, and fade out */
+                transform: translate(var(--x-end), var(--y-end)) rotate(var(--rotate-end)) scale(1);
+                opacity: 0;
+            }
+        }
+
+        .confetti {
+            /* Set defaults and apply the animation */
+            /* animation-fill-mode: forwards keeps the element at its 100% state after animation */
+            opacity: 0;
+            /* Hidden by default */
+        }
+
+        .confetti.animate {
+            animation: burst 1.5s ease-out forwards;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div>
+        <h1>Click Anywhere!</h1>
+        <p>(Or tap here)</p>
+    </div>
+
+    <!-- The SVG container -->
+    <!-- Note the viewBox which sets up a coordinate system from -250 to 250 on both axes -->
+    <svg class="confetti-svg" viewBox="-250 -250 500 500" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <rect id="confetti-rect" width="8" height="15" rx="2" ry="2"></rect>
+            <circle id="confetti-circle" r="5"></circle>
+            <polygon id="confetti-triangle" points="0,0 10,0 5,10"></polygon>
+        </defs>
+        <g id="confetti-group"></g>
+    </svg>
+
+    <script>
+        // Add these constants outside the function if they aren't already
+        const confettiGroup = document.getElementById('confetti-group');
+        const confettiShapes = ['#confetti-rect', '#confetti-circle', '#confetti-triangle'];
+        const confettiColors = ['#f9423a', '#62cf39', '#20c2e0', '#ffb33f', '#a562ff'];
+        const confettiCount = 50;
+        const animationDuration = 1500; // in milliseconds, from the CSS
+        const maxAnimationDelay = 200; // in milliseconds, from the JS
+
+        function createConfetti() {
+            // This function now adds a new burst without clearing the old ones.
+
+            for (let i = 0; i < confettiCount; i++) {
+                const use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+
+                // Pick a random shape and color
+                const shape = confettiShapes[Math.floor(Math.random() * confettiShapes.length)];
+                const color = confettiColors[Math.floor(Math.random() * confettiColors.length)];
+
+                use.setAttribute('href', shape);
+                use.setAttribute('fill', color);
+                use.classList.add('confetti');
+
+                // Set random values for the animation via CSS Custom Properties
+                use.style.setProperty('--x-end', `${(Math.random() - 0.5) * 500}px`);
+                use.style.setProperty('--y-end', `${(Math.random() - 0.5) * 500}px`);
+                use.style.setProperty('--rotate-end', `${Math.random() * 1080}deg`);
+
+                // Add a random delay to stagger the burst
+                const delay = Math.random() * maxAnimationDelay;
+                use.style.animationDelay = `${delay}ms`;
+
+                // Add the .animate class to trigger the animation
+                use.classList.add('animate');
+
+                confettiGroup.appendChild(use);
+
+                // **THE CORRECTION IS HERE**
+                // Set a timeout to remove the element after the animation is completely finished.
+                // We add a small buffer (50ms) to be safe.
+                const removalTimeout = animationDuration + delay + 50;
+
+                setTimeout(() => {
+                    use.remove();
+                }, removalTimeout);
+            }
+        }
+
+        // Trigger the burst on click
+        document.body.addEventListener('click', createConfetti);
+
+        // Initial burst on page load
+        createConfetti();
+    </script>
+
+</body>
+
+</html>

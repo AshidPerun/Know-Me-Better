@@ -1,0 +1,300 @@
+/* Base Reset and Font */
+body {
+  margin: 0;
+  font-family: "Segoe UI", sans-serif;
+  background: #f9f9f9;
+  color: #333;
+  overflow-x: hidden;
+}
+
+/* App Container (optional wrapper) */
+#appContainer {
+  position: relative;
+  width: 100%;
+  /* max-width: 600px; */
+  margin: 0 auto;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Base Screen Styles */
+section {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 2rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  background: linear-gradient(135deg, #74ebd5, #acb6e5);
+  text-align: center;
+
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+/* Active screen becomes visible */
+section.active {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+  visibility: visible;
+  z-index: 1;
+}
+
+/* Titles */
+.mainTitle {
+  font-size: 5rem;
+  margin-bottom: 1rem;
+  color: #ffffff;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.sectionTitle {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  color: #ffffff;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.plainText {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #000000;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.screenContent {
+  margin-top: 2rem;
+}
+
+.rowContent {
+  display: flex;
+  flex-direction: row;
+  gap: 3rem;
+}
+
+.selctionContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding: 1rem;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+}
+
+/* Each selection button-like h3 */
+.selctionContainer h3 {
+  background-color: #ffffff;
+  color: #333;
+  padding: 0.75rem 1.5rem;
+  border-radius: 1rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+  user-select: none;
+}
+
+.selctionContainer h3:hover {
+  background-color: #f0f0f0;
+  transform: scale(1.05);
+}
+
+.selctionContainer h3.active {
+  background-color: #b29dff;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(116, 235, 213, 0.4);
+}
+
+.questionArea {
+  font-size: 3rem;
+  color: #000000;
+}
+
+/* Button Style */
+.button {
+  background-color: #ffffff;
+  color: #333;
+  padding: 1rem 2rem;
+  border-radius: 1rem;
+  font-size: 1.25rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s, background-color 0.2s;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  text-decoration: none;
+  border: none;
+  user-select: none;
+  margin-top: 2rem;
+}
+
+.button:hover {
+  background-color: #f0f0f0;
+  transform: scale(1.05);
+}
+
+.button:active {
+  transform: scale(1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.buttonGreen {
+  background-color: #28a745;
+}
+
+.buttonGreen:hover {
+  background-color: #36cc59;
+}
+
+.buttonRed {
+  background-color: #dc3545;
+}
+
+.buttonRed:hover {
+  background-color: #eb4d5d;
+}
+
+.inputWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.inputWrapper label {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  color: #2c3e50;
+  font-weight: 500;
+}
+
+.inputWrapper input[type="text"] {
+  width: 100%;
+  max-width: 300px;
+  padding: 0.75rem 1rem;
+  border: 2px solid #ffffff;
+  border-radius: 1rem;
+  font-size: 1.1rem;
+  color: #000000;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  outline: none;
+}
+
+.inputWrapper input[type="text"]::placeholder {
+  color: #aaa;
+}
+
+.inputWrapper input[type="text"]:focus {
+  border-color: #74ebd5;
+  box-shadow: 0 0 0 3px rgba(116, 235, 213, 0.3);
+}
+
+.alert {
+  position: fixed;
+  top: 5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #af4c4c; /* Green */
+  color: rgb(255, 255, 255);
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  font-size: 1rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.alert.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+
+/* The SVG is positioned in the center */
+.confetti-svg {
+  position: absolute;
+  width: 80vw;
+  height: 80vh;
+  /* Make the origin (0,0) of the SVG coordinate system be in the center */
+  overflow: visible;
+  z-index: -1;
+}
+
+#score {
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+/* Keyframe for the burst animation */
+@keyframes burst {
+  0% {
+    /* Start small, at the origin, and fully opaque */
+    transform: translate(0, 0) rotate(0deg) scale(0);
+    opacity: 1;
+  }
+
+  100% {
+    /* Move to a random final position, rotate, and fade out */
+    transform: translate(var(--x-end), var(--y-end)) rotate(var(--rotate-end))
+      scale(1);
+    opacity: 0;
+  }
+}
+
+.confetti {
+  /* Set defaults and apply the animation */
+  /* animation-fill-mode: forwards keeps the element at its 100% state after animation */
+  opacity: 0;
+  /* Hidden by default */
+}
+
+.confetti.animate {
+  animation: burst 1.5s ease-out forwards;
+}
+
+/* Responsive Typography & Layout */
+@media (max-width: 768px) {
+  .mainTitle {
+    font-size: 3rem;
+  }
+
+  .button {
+    font-size: 1rem;
+    padding: 0.75rem 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  section {
+    padding: 1rem;
+  }
+
+  .mainTitle {
+    font-size: 2.5rem;
+  }
+
+  .button {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+}
