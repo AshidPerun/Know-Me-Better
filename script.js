@@ -379,6 +379,10 @@ function setWinnerScreen(data){
     goToScreen('winnerScreen');
 }
 
+function restart(){
+    
+}
+
 //Helpers
 function goToScreen(toId) {
     const fromScreen = document.getElementById(currentScreenId) || null;

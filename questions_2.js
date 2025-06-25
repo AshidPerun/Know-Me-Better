@@ -106,6 +106,23 @@ const questions_2 = {
     "What do we do best as a team?",
     "What's one goal we still want to achieve together?",
     "What's one thing we've overcome as a couple that made us stronger?"
+  ],
+  siblings: [
+    "Who was the favorite child? 😏",
+    "What was the biggest fight we ever had about?",
+    "Which of us was more spoiled?",
+    "What was our go-to game or activity as kids?",
+    "Who got in trouble more often?",
+    "What's something we both found hilarious growing up?",
+    "Who had the weirdest childhood obsession?",
+    "Which TV show or cartoon did we both love?",
+    "What's one thing we always argued about?",
+    "What's a shared memory that still makes us laugh?",
+    "Who's more likely to forget mom's birthday?",
+    "Who cleaned the room less — but got away with it?",
+    "What's something we bonded over that others wouldn't get?",
+    "What's one thing I used to always borrow or steal from you?",
+    "What's a moment when we actually teamed up for once?"
   ]
 };
 
@@ -113,10 +130,11 @@ const questionsMap = {
   1: { label: '💞 Lovers', questions: 'lovers' },
   2: { label: '👯‍♂️ Best Friends', questions: 'bestFriends' },
   3: { label: '👨‍👩‍👧 Mom or Dad', questions: 'momOrDad' },
-  4: { label: '💪 Bros', questions: 'bros' },
-  5: { label: '👩 Sisters', questions: 'sisters' },
-  6: { label: '🏠 Roommates', questions: 'roommates' },
-  7: { label: '💼 Work Buddies', questions: 'workBuddies' },
-  8: { label: '💍 Newlyweds', questions: 'newlyweds' },
-  9: { label: '👫 Married Couple', questions: 'marriedCouple' }
+  4: { label: '👩‍👧‍👧 Siblings', questions: 'siblings' },
+  5: { label: '💪 Bros', questions: 'bros' },
+  6: { label: '👩 Sisters', questions: 'sisters' },
+  7: { label: '🏠 Roommates', questions: 'roommates' },
+  8: { label: '💼 Work Buddies', questions: 'workBuddies' },
+  9: { label: '💍 Newlyweds', questions: 'newlyweds' },
+  10: { label: '👫 Married Couple', questions: 'marriedCouple' }
 };

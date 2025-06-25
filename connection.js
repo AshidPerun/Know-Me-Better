@@ -44,6 +44,10 @@ function connect(){
                 onConnected();
             });
 
+            conn.on('close', () => {
+                showAlert("Other player disconnected.", 'error');
+            });
+
             conn.on('error', (err) => {
                 console.error('Connection error:', err);
                 showAlert('Connection error. Please try again.', 'error');
@@ -92,6 +96,10 @@ function connect(){
         conn.on('error', (err) => {
             console.error('Connection error with incoming connection:', err);
             showAlert('A connection error occurred.', 'error');
+        });
+
+        conn.on('close', () => {
+            showAlert("Other player disconnected.", 'error');
         });
     });
 
