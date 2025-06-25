@@ -23,9 +23,9 @@
                 <label for="nameInput">Enter your name</label>
                 <input autocomplete="off" type="text" id="nameInput" placeholder="Your name here..." />
             </div>
-            <div submit id="startButton" class="button" onclick="startGame()">
+            <button id="startButton" class="button" onclick="startGame()">
                 Start
-            </div>
+            </button>
         </section>
         <section id="typeSelectionScreen">
             <h3 class="sectionTitle">Select Quiz Type</h3>
@@ -34,30 +34,30 @@
                     <!-- Buttons will be injected here -->
                 </div>
             </div>
-            <div class="button" onclick="onGameSetup()">
+            <button class="button" onclick="onGameSetup()">
                 Choose & Continue
-            </div>
+            </button>
         </section>
         <section id="inviteScreen">
-            <h3 class="sectionTitle">Invite your Friend</h3>
+            <h3 class="sectionTitle">Invite your Partner</h3>
             <div class="screenContent">
-                <h3>Share Link to your friend...</h3>
+                <h3>Share the Link to your friend...</h3>
             </div>
-            <div class="button" onclick="inviteFriend()">Copy Link</div>
+            <button class="button" onclick="inviteFriend()">Copy Link</button>
         </section>
         <section id="waitingScreen">
-            <h3 class="sectionTitle">Waiting for your friend...</h3>
+            <h3 class="sectionTitle">Waiting for your Partner...</h3>
             <div class="screenContent">
-                <h3>Share Link to your friend...</h3>
+                <h3>Share Link to your Partner...</h3>
             </div>
-            <div class="button" onclick="inviteFriend()">Copy Link</div>
+            <button class="button" onclick="inviteFriend()">Copy Link</button>
         </section>
         <section id="friendConnectedScreen">
-            <h3 class="sectionTitle">Friend Connected...</h3>
+            <h3 class="sectionTitle">Partner Connected...</h3>
             <div class="screenContent">
                 <h3 id="joinedFriendName">Name : </h3>
             </div>
-            <div class="button" onclick="acceptFriend()">Accept</div>
+            <button class="button" onclick="acceptFriend()">Accept</button>
         </section>
         <section id="beforeQuestionScreen">
             <h3 id="questionNumber" class="sectionTitle">Question</h3>
@@ -71,41 +71,41 @@
                 <h3 class="questionArea" id="questionArea">Here's a question...</h3>
             </div>
             <div class="inputWrapper">
-                <label for="answerInput">Enter your Answer:</label>
+                <label for="answerInput">Enter your Answer</label>
                 <input autocomplete="off" type="text" id="answerInput" placeholder="Your Answer here..." />
             </div>
-            <div class="button" onclick="submitAnswer()">Submit Answer</div>
+            <button class="button" onclick="submitAnswer()">Submit Answer</button>
         </section>
         <section id="reviewScreen">
             <h3 class="sectionTitle">Review Your Answers</h3>
             <div class="screenContent">
                 <h3 class="questionArea" id="questionArea_2">Here's a question...</h3>
-                <p class="plainText">Your Friend Guess this...</p>
+                <p class="plainText">Your Partner Guess this...</p>
                 <p id="friendsGuess" class="plainText"></p>
             </div>
             <div class="rowContent">
-                <div class="button buttonGreen" onclick="submitReview(true)">
+                <button class="button buttonGreen" onclick="submitReview(true)">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                         class="bi bi-check-circle-fill" viewBox="0 0 16 16">
                         <path
                             d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
                     </svg>
                     Correct
-                </div>
-                <div class="button buttonRed" onclick="submitReview(false)">
+                </button>
+                <button class="button buttonRed" onclick="submitReview(false)">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                         class="bi bi-x-circle-fill" viewBox="0 0 16 16">
                         <path
                             d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z" />
                     </svg>
                     Wrong
-                </div>
+                </button>
             </div>
         </section>
         <section id="correctWrongScreen">
             <h3 id="correctWrong" class="sectionTitle">Correct / Wrong</h3>
             <p id="score">Results details...</p>
-            <div class="button" onclick="submitReadyNextQuiz()">Next</div>
+            <button class="button" onclick="submitReadyNextQuiz()">Next</button>
         </section>
         <section id="winnerScreen">
             <h3 id="winnerIs" class="sectionTitle">And the Winner Is...</h3>
@@ -118,10 +118,10 @@
                 <g id="confetti-group"></g>
             </svg>
             <p id="winnerName" class="sectionTitle"></p>
-            <div class="button" onclick="startQuiz()">Play Again</div>
+            <button class="button" onclick="startQuiz()">Play Again</button>
         </section>
         <section id="inGameWaitingScreen">
-            <h3 class="sectionTitle">Waiting for your Friend...</h3>
+            <h3 class="sectionTitle">Waiting for your Partner...</h3>
             <svg width="60" height="60" viewBox="0 0 38 38">
                 <g transform="translate(19 19)">
                     <g transform="rotate(0)">
