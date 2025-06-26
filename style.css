@@ -31,7 +31,7 @@ section {
   justify-content: center;
   align-items: center;
 
-  background: linear-gradient(135deg, #74ebd5, #acb6e5);
+  background: linear-gradient(135deg, #74c9eb, #b7a9f5);
   text-align: center;
 
   opacity: 0;
@@ -82,7 +82,7 @@ section.active {
   gap: 3rem;
 }
 
-.selctionContainer {
+.selectionContainer {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -96,8 +96,7 @@ section.active {
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
 }
 
-/* Each selection button-like h3 */
-.selctionContainer h3 {
+.selectionContainer h3 {
   background-color: #ffffff;
   color: #333;
   padding: 0.75rem 1.5rem;
@@ -108,14 +107,16 @@ section.active {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease, background-color 0.2s ease;
   user-select: none;
+  min-width: 120px;
+  text-align: center;
 }
 
-.selctionContainer h3:hover {
+.selectionContainer h3:hover {
   background-color: #f0f0f0;
   transform: scale(1.05);
 }
 
-.selctionContainer h3.active {
+.selectionContainer h3.active {
   background-color: #b29dff;
   color: #fff;
   box-shadow: 0 4px 12px rgba(116, 235, 213, 0.4);
@@ -273,15 +274,43 @@ section.active {
   animation: burst 1.5s ease-out forwards;
 }
 
-/* Responsive Typography & Layout */
+/* Responsive Typography & Layout - Maintain structure, only size down */
+@media (max-width: 1024px) {
+  .selectionContainer {
+    gap: 0.75rem;
+  }
+
+  .selectionContainer h3 {
+    font-size: 1rem;
+    padding: 0.65rem 1.25rem;
+  }
+}
+
 @media (max-width: 768px) {
   .mainTitle {
-    font-size: 3rem;
+    font-size: 2.5rem;
   }
 
   .button {
     font-size: 1rem;
     padding: 0.75rem 1.5rem;
+  }
+
+  .sectionTitle {
+    margin-bottom: 1rem;
+    font-size: 1.4rem;
+    text-align: center;
+  }
+
+  .selectionContainer {
+    gap: 0.6rem;
+    padding: 0.75rem;
+    margin-top: 1rem;
+  }
+
+  .selectionContainer h3 {
+    font-size: 0.95rem;
+    padding: 0.6rem 1rem;
   }
 }
 
@@ -291,11 +320,21 @@ section.active {
   }
 
   .mainTitle {
-    font-size: 2.5rem;
+    font-size: 2rem;
   }
 
   .button {
-    padding: 0.5rem 1rem;
+    padding: 0.6rem 1rem;
     font-size: 0.9rem;
+  }
+
+  .selectionContainer {
+    gap: 0.5rem;
+    padding: 0.5rem;
+  }
+
+  .selectionContainer h3 {
+    font-size: 0.85rem;
+    padding: 0.5rem 0.8rem;
   }
 }

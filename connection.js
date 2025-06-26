@@ -38,6 +38,10 @@ function connect(){
                         onReadyNextQuiz(data.data);
                     }else if(data.type == 'Winner'){
                         onWinner(data.data);
+                    }else if(data.type == 'RequestRestart'){
+                        onRestartRequest(data.data);
+                    }else if(data.type == 'AcceptRestart'){
+                        onAcceptRestart(data.data);
                     }
                 });
 
@@ -59,8 +63,8 @@ function connect(){
             currentInviteLink = url.toString();
             isHost = true;
 
-            console.log('Your Peer ID:', connectionId);
-            console.log('Invite Link:', currentInviteLink);
+            // console.log('Your Peer ID:', connectionId);
+            // console.log('Invite Link:', currentInviteLink);
 
             onConnected();
         }
@@ -87,6 +91,10 @@ function connect(){
                     onReadyNextQuiz(data.data);
                 }else if(data.type == 'Winner'){
                     onWinner(data.data);
+                }else if(data.type == 'RequestRestart'){
+                    onRestartRequest(data.data);
+                }else if(data.type == 'AcceptRestart'){
+                    onAcceptRestart(data.data);
                 }
             });
 

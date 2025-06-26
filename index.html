@@ -30,7 +30,7 @@
         <section id="typeSelectionScreen">
             <h3 class="sectionTitle">Select Quiz Type</h3>
             <div class="screenContent">
-                <div id="selectionContainer" class="selctionContainer">
+                <div id="selectionContainer" class="selectionContainer">
                     <!-- Buttons will be injected here -->
                 </div>
             </div>
@@ -118,7 +118,11 @@
                 <g id="confetti-group"></g>
             </svg>
             <p id="winnerName" class="sectionTitle"></p>
-            <button class="button" onclick="startQuiz()">Play Again</button>
+            <button class="button" onclick="requestRestart()">Play Again</button>
+        </section>
+        <section id="requestRestartScreen">
+            <h3 class="sectionTitle">Your Partner asking to play again!</h3>
+            <button class="button" onclick="acceptRestart()">Yes lt's Play Again</button>
         </section>
         <section id="inGameWaitingScreen">
             <h3 class="sectionTitle">Waiting for your Partner...</h3>

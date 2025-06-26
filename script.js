@@ -15,10 +15,12 @@ const selectionContainer = document.getElementById('selectionContainer');
 let currentScreenId = 'startScreen';
 let quizType = 0;
 let round = 1;
+let restart = false;
 let MAX_ROUNDS = 5;
 let playerName = null;
 let friendName = null;
 let tempFriendName = null;
+let askedQuestions = [];
 
 let myScore = 0;
 let friendScore = 0;
@@ -43,6 +45,11 @@ document.addEventListener('DOMContentLoaded', () => {
             section.classList.remove('active');
         }
     });
+
+    console.log(
+        "%cOf course you can cheat... but why? 😊",
+        "color: #ff4081; font-size: 16px; font-weight: bold;"
+    );
 });
 
 Object.entries(questionsMap).forEach(([key, { label }]) => {
@@ -78,7 +85,6 @@ function onConnected() {
         goToScreen('inGameWaitingScreen'); // Wait for quiz from host
         sendData('Name', { name: playerName });
     }
-
 }
 
 function onGameSetup() {
@@ -87,7 +93,11 @@ function onGameSetup() {
         return;
     }
 
-    goToScreen('inviteScreen');
+    if(restart && isHost){
+        startQuiz();
+    }else{
+        goToScreen('inviteScreen');
+    }
 }
 
 function inviteFriend() {
@@ -165,19 +175,24 @@ function onStartQuiz(data){
 }
 
 function generateQuiz() {
-    if(round > MAX_ROUNDS && isHost){
+    if (round > MAX_ROUNDS && isHost) {
         setWinner();
         return;
     }
 
-    const typeQuections = questions_2[questionsMap[quizType].questions];
-    let quiz = typeQuections[Math.floor(Math.random() * typeQuections.length)];
+    const typeQuestions = questions_2[questionsMap[quizType].questions];
+    const availableQuestions = typeQuestions.filter(q => !askedQuestions.includes(q));
 
-    while(quiz == currentQuiz){
-        quiz = typeQuections[Math.floor(Math.random() * typeQuections.length)];
+    if (availableQuestions.length === 0) {
+        console.warn("No more new questions available.");
+        return;
     }
 
+    // Select random new question
+    let quiz = availableQuestions[Math.floor(Math.random() * availableQuestions.length)];
+
     setQuiz(quiz, round);
+    askedQuestions.push(quiz); // add to asked list
     round++;
 }
 
@@ -303,7 +318,7 @@ function onShowReviewResult(data){
         scoreHtml.innerText = `${pName[0]} : ${myScore} | ${fName[0]} : ${friendScore}`;
 
         // This text should reflect how MY answer was judged by my FRIEND.
-        correctWrong.innerText = data.howYouWereReviewedBySender ? 'Correct!' : 'Wrong!';
+        correctWrong.innerText = data.howYouWereReviewedBySender ? 'Correct! 🤪' : 'Wrong! 😕';
         goToScreen('correctWrongScreen');
     } else {
         console.warn("onShowReviewResult: Invalid data received", data);
@@ -336,25 +351,25 @@ function nextQuiz(){
 }
 
 function setWinner(){
-    let winnerPlayerName = null; // Use a different variable name to avoid confusion with the HTML element
+    let winnerPlayerName = null;
     let isDraw = false;
 
     if (myScore > friendScore) {
         winnerPlayerName = playerName;
     } else if (friendScore > myScore) {
         winnerPlayerName = friendName;
-    } else { // Scores are equal
+    } else {
         isDraw = true;
     }
 
     const winnerData = { winner: winnerPlayerName, isDraw: isDraw };
 
     sendData('Winner', winnerData);
-    setWinnerScreen(winnerData); // Host displays winner screen
+    setWinnerScreen(winnerData);
 }
 
 function onWinner(data){
-    if(data){ // Basic check for data presence
+    if(data){
         setWinnerScreen(data);
     } else {
         console.warn("onWinner: Invalid data received", data);
@@ -366,8 +381,8 @@ function setWinnerScreen(data){
         winnerIs.innerText = 'It\'s a Draw!';
         winnerName.innerText = 'You both played well!';
     } else {
-        winnerIs.innerText = 'The Winner is'; // Default text
-        winnerName.innerText = data.winner; // This will be the name string
+        winnerIs.innerText = 'The Winner is';
+        winnerName.innerText = data.winner + ' 🥳';
     }
 
     for(let c = 0; c < 5; c++){
@@ -379,8 +394,34 @@ function setWinnerScreen(data){
     goToScreen('winnerScreen');
 }
 
-function restart(){
-    
+function requestRestart(){
+    sendData('RequestRestart', { restart: true });
+    goToScreen('inGameWaitingScreen');
+}
+
+function onRestartRequest(data){
+    if(data && data.restart){
+        goToScreen('requestRestartScreen');
+    }
+}
+
+function acceptRestart(){
+    sendData('AcceptRestart', { restart: true });
+    if(isHost){
+        restart = true;
+        goToScreen('typeSelectionScreen');
+    }else{
+        goToScreen('inGameWaitingScreen');
+    }
+}
+
+function onAcceptRestart(data){
+    if(data && data.restart){
+        if(isHost){
+            restart = true;
+            goToScreen('typeSelectionScreen');
+        }
+    }
 }
 
 //Helpers
