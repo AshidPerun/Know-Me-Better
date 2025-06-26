@@ -60,9 +60,9 @@ Object.entries(questionsMap).forEach(([key, { label }]) => {
     selectionContainer.appendChild(h3);
 });
 
-document.querySelectorAll('.selctionContainer h3').forEach(item => {
+document.querySelectorAll('.selectionContainer h3').forEach(item => {
   item.addEventListener('click', () => {
-    document.querySelectorAll('.selctionContainer h3').forEach(h3 => h3.classList.remove('active'));
+    document.querySelectorAll('.selectionContainer h3').forEach(h3 => h3.classList.remove('active'));
     item.classList.add('active');
   });
 });
