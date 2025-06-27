@@ -34,9 +34,19 @@
                     <!-- Buttons will be injected here -->
                 </div>
             </div>
-            <button class="button" onclick="onGameSetup()">
+            <button class="button" onclick="goToScreen('quizNumberScreen')">
                 Choose & Continue
             </button>
+        </section>
+        <section id="quizNumberScreen">
+            <h3 class="sectionTitle">Select Quiz Count</h3>
+            <div id="quizNumbersContainer" class="selectionContainer">
+                <h3 class="active" onclick="setMaxQuizCount(5)">5 Quiz</h3>
+                <h3 onclick="setMaxQuizCount(10)">10 Quiz</h3>
+                <h3 onclick="setMaxQuizCount(15)">15 Quiz</h3>
+                <h3 onclick="setMaxQuizCount(20)">20 Quiz</h3>
+            </div>
+            <button class="button" onclick="onGameSetup()">Choose & Continue</button>
         </section>
         <section id="inviteScreen">
             <h3 class="sectionTitle">Invite your Partner</h3>

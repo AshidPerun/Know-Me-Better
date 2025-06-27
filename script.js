@@ -10,13 +10,14 @@ const scoreHtml = document.getElementById('score');
 const winnerName = document.getElementById('winnerName');
 const winnerIs = document.getElementById('winnerIs');
 const selectionContainer = document.getElementById('selectionContainer');
+const quizNumbersContainer = document.getElementById('quizNumbersContainer');
 
 
 let currentScreenId = 'startScreen';
 let quizType = 0;
 let round = 1;
 let restart = false;
-let MAX_ROUNDS = 5;
+let MAX_ROUNDS = 10;
 let playerName = null;
 let friendName = null;
 let tempFriendName = null;
@@ -37,6 +38,13 @@ let friendReadyForNextQuiz = false;
 
 // Initialize the first screen
 document.addEventListener('DOMContentLoaded', () => {
+    if (window.RTCPeerConnection) {
+        showAlert("WebRTC is supported ✅");
+    } else {
+        showAlert("Your browser does not support WebRTC ❌");
+    }
+
+
     const allSections = document.querySelectorAll('#appContainer > section');
     allSections.forEach(section => {
         if (section.id === currentScreenId) {
@@ -60,9 +68,16 @@ Object.entries(questionsMap).forEach(([key, { label }]) => {
     selectionContainer.appendChild(h3);
 });
 
-document.querySelectorAll('.selectionContainer h3').forEach(item => {
+selectionContainer.querySelectorAll('h3').forEach(item => {
   item.addEventListener('click', () => {
-    document.querySelectorAll('.selectionContainer h3').forEach(h3 => h3.classList.remove('active'));
+    selectionContainer.querySelectorAll('h3').forEach(h3 => h3.classList.remove('active'));
+    item.classList.add('active');
+  });
+});
+
+quizNumbersContainer.querySelectorAll('h3').forEach(item => {
+  item.addEventListener('click', () => {
+    quizNumbersContainer.querySelectorAll('h3').forEach(h3 => h3.classList.remove('active'));
     item.classList.add('active');
   });
 });
@@ -118,6 +133,10 @@ function inviteFriend() {
 
 function onTypeSelect(number) {
     quizType = number;
+}
+
+function setMaxQuizCount(number) {
+    MAX_ROUNDS = number;
 }
 
 function onOtherPlayerJoin() {

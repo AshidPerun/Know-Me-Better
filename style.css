@@ -122,6 +122,10 @@ section.active {
   box-shadow: 0 4px 12px rgba(116, 235, 213, 0.4);
 }
 
+#joinedFriendName {
+  font-size: 2rem;
+}
+
 .questionArea {
   font-size: 3rem;
   color: #000000;
@@ -336,5 +340,11 @@ section.active {
   .selectionContainer h3 {
     font-size: 0.85rem;
     padding: 0.5rem 0.8rem;
+  }
+
+  .alert {
+    font-size: 1rem;
+    left: 50%;
+    padding: 0.5rem 1rem;
   }
 }

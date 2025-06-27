@@ -49,7 +49,7 @@ function connect(){
             });
 
             conn.on('close', () => {
-                showAlert("Other player disconnected.", 'error');
+                showAlert("Other player disconnected.", 'error', 10000);
             });
 
             conn.on('error', (err) => {
@@ -62,9 +62,6 @@ function connect(){
             url.searchParams.set('connectionId', connectionId);
             currentInviteLink = url.toString();
             isHost = true;
-
-            // console.log('Your Peer ID:', connectionId);
-            // console.log('Invite Link:', currentInviteLink);
 
             onConnected();
         }
@@ -107,7 +104,7 @@ function connect(){
         });
 
         conn.on('close', () => {
-            showAlert("Other player disconnected.", 'error');
+            showAlert("Other player disconnected.", 'error', 10000);
         });
     });
 
@@ -118,7 +115,7 @@ function connect(){
         if (err.type === 'unavailable-id') {
             showAlert('This game ID is already taken. Please refresh.', 'error');
         } else if (err.type === 'peer-unavailable') {
-             showAlert('Could not connect to the other player. They might be offline.', 'error');
+             showAlert('Could not connect to the other player. They might be offline.', 'error', 10000);
         } else {
             showAlert('A network error occurred. Please check your connection.', 'error');
         }
