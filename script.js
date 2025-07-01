@@ -10,14 +10,16 @@ const scoreHtml = document.getElementById('score');
 const winnerName = document.getElementById('winnerName');
 const winnerIs = document.getElementById('winnerIs');
 const selectionContainer = document.getElementById('selectionContainer');
+const reactionContainer = document.getElementById('reactionContainer');
 const quizNumbersContainer = document.getElementById('quizNumbersContainer');
 
+const quizLevels = 5;
 
 let currentScreenId = 'startScreen';
 let quizType = 0;
 let round = 1;
 let restart = false;
-let MAX_ROUNDS = 10;
+let MAX_ROUNDS = 5;
 let playerName = null;
 let friendName = null;
 let tempFriendName = null;
@@ -38,13 +40,6 @@ let friendReadyForNextQuiz = false;
 
 // Initialize the first screen
 document.addEventListener('DOMContentLoaded', () => {
-    if (window.RTCPeerConnection) {
-        showAlert("WebRTC is supported ✅");
-    } else {
-        showAlert("Your browser does not support WebRTC ❌");
-    }
-
-
     const allSections = document.querySelectorAll('#appContainer > section');
     allSections.forEach(section => {
         if (section.id === currentScreenId) {
@@ -60,21 +55,6 @@ document.addEventListener('DOMContentLoaded', () => {
     );
 });
 
-Object.entries(questionsMap).forEach(([key, { label }]) => {
-    const h3 = document.createElement('h3');
-    h3.innerText = label;
-    h3.onclick = () => onTypeSelect(Number(key));
-    
-    selectionContainer.appendChild(h3);
-});
-
-selectionContainer.querySelectorAll('h3').forEach(item => {
-  item.addEventListener('click', () => {
-    selectionContainer.querySelectorAll('h3').forEach(h3 => h3.classList.remove('active'));
-    item.classList.add('active');
-  });
-});
-
 quizNumbersContainer.querySelectorAll('h3').forEach(item => {
   item.addEventListener('click', () => {
     quizNumbersContainer.querySelectorAll('h3').forEach(h3 => h3.classList.remove('active'));
@@ -85,29 +65,51 @@ quizNumbersContainer.querySelectorAll('h3').forEach(item => {
 function startGame() {
     if (nameInput.value && nameInput.value.length <= 15) {
         playerName = nameInput.value;
-        connect(); // Handles peer connection
-    }else if( nameInput.value.length > 15){
+        connect(playerName);
+    }else if(nameInput.value.length > 15){
         showAlert('Name is Too Big!', 'warning');
     } else {
         showAlert('Enter your name to start', 'warning');
     }
 }
 
-function onConnected() {
-    if (isHost) {
+function setQuizTypes(data){
+    if(data){
+        Object.entries(data).forEach(([key, { label }]) => {
+            const h3 = document.createElement('h3');
+            h3.innerText = label;
+            h3.onclick = () => onTypeSelect(Number(key));
+            
+            selectionContainer.appendChild(h3);
+        });
+
+        selectionContainer.querySelectorAll('h3').forEach(item => {
+            item.addEventListener('click', () => {
+                selectionContainer.querySelectorAll('h3').forEach(h3 => h3.classList.remove('active'));
+                item.classList.add('active');
+            });
+        });
+
         goToScreen('typeSelectionScreen');
-    } else {
-        goToScreen('inGameWaitingScreen'); // Wait for quiz from host
-        sendData('Name', { name: playerName });
     }
 }
 
-function onGameSetup() {
+function onConnected() {
+    if (!isHost) {
+        goToScreen('inGameWaitingScreen'); // Wait for quiz from host 
+    }
+}
+
+function onContinueQuizType(){
     if (quizType === 0) {
         showAlert('Please Choose a Quiz Type..', 'warning');
         return;
     }
 
+    goToScreen('quizNumberScreen')
+}
+
+function onGameSetup() {
     if(restart && isHost){
         startQuiz();
     }else{
@@ -139,18 +141,14 @@ function setMaxQuizCount(number) {
     MAX_ROUNDS = number;
 }
 
-function onOtherPlayerJoin() {
-    sendData('Name', { name: playerName });
-}
-
-function onName(data) {
-    if(data && data.name){
-        joinedFriendName.innerText = data.name;
+function onOtherPlayerJoin(player) {
+    if(player && player.name){
+        joinedFriendName.innerText = player.name;
 
         if(isHost){
-            tempFriendName = data.name;
+            tempFriendName = player.name;
         }else{
-            friendName = data.name;
+            friendName = player.name;
         }
 
         if(isHost){
@@ -161,77 +159,33 @@ function onName(data) {
     }
 }
 
+function onOtherPlayerLeave(){
+    showAlert('Other Player Disconnected', 'error', 10000);
+}
+
 function acceptFriend() {
     friendName = tempFriendName;
     startQuiz(); // Host starts quiz after guest joins
 }
 
 function startQuiz() {
-    round = 1;
-    myScore = 0;
-    friendScore = 0;
-
-    if(!isHost){
-        goToScreen('inGameWaitingScreen');
-    }else{
-        generateQuiz(); // Only host calls this
-    }
-
     if (isHost) {
-        sendData('StartQuiz', { round, resetScore: true  }); // Send to peer
+        sendData('GameRoom:StartQuiz', { quizType: quizType, maxRounds: MAX_ROUNDS });
     }
 }
 
-function onStartQuiz(data){
+function onNextQuiz(data){
     if(data){
-        round = data.round;
-
-        if(data.resetScore){
-            myScore = 0;
-            friendScore = 0;
-        }
+        generateReactions(data.reactions);
+        setQuiz(data.quiz, data.round);
+        askedQuestions.push(data.quiz);
     }
-}
-
-function generateQuiz() {
-    if (round > MAX_ROUNDS && isHost) {
-        setWinner();
-        return;
-    }
-
-    const typeQuestions = questions_2[questionsMap[quizType].questions];
-    const availableQuestions = typeQuestions.filter(q => !askedQuestions.includes(q));
-
-    if (availableQuestions.length === 0) {
-        console.warn("No more new questions available.");
-        return;
-    }
-
-    // Select random new question
-    let quiz = availableQuestions[Math.floor(Math.random() * availableQuestions.length)];
-
-    setQuiz(quiz, round);
-    askedQuestions.push(quiz); // add to asked list
-    round++;
 }
 
 function setQuiz(quiz, quizNumber) {
     if (quiz && quiz.length > 0) {
         questionArea.innerHTML = quiz;
-        questionArea_2.innerHTML = quiz;
         answerInput.value = '';
-
-        currentQuiz = quiz;
-        isAnsweredCurrentQuiz = false;
-        isReviewedCurrentQuiz = false;
-        isReadyForNextQuiz = false;
-        friendsAnswer = null;
-        friendsReview = null;
-        friendReadyForNextQuiz = false;
-
-        if (isHost) {
-            sendData('Quiz', { quiz, quizNumber }); // Send to peer
-        }
 
         questionNumber.innerText = `Question ${quizNumber}`;
         goToScreen('beforeQuestionScreen');
@@ -242,8 +196,19 @@ function setQuiz(quiz, quizNumber) {
     }
 }
 
-function onQuiz(data) {
-    setQuiz(data.quiz, data.quizNumber);
+function generateReactions(reactions){
+    if(reactions.length > 0){
+        reactionContainer.innerHTML = '';
+
+        reactions.forEach((reaction) => {
+            const button = document.createElement('button');
+            button.classList.add('button', 'buttonReaction');
+            button.innerText = reaction.label + ' +' + reaction.points;
+            button.onclick =  () => submitReview(Number(reaction.points), reaction.label);
+
+            reactionContainer.appendChild(button);
+        });
+    }
 }
 
 // ✳️ Answer Phase
@@ -251,30 +216,16 @@ function submitAnswer() {
     const answer = answerInput.value.trim();
 
     if (answer) {
-        sendData('Answer', { answer });
-
-        isAnsweredCurrentQuiz = true;
+        sendData('GameRoom:SubmitAnswer', { answer: answer });
         goToScreen('inGameWaitingScreen');
-
-        // If friend already answered, move to review
-        if (friendsAnswer !== null) {
-            setReview({ answer: friendsAnswer });
-        }
     } else {
         showAlert("Let's give a valid Answer", 'warning');
     }
 }
 
-function onAnswer(data) {
-    if (isAnsweredCurrentQuiz) {
-        setReview(data); // Show their answer for review
-    } else {
-        friendsAnswer = data.answer;
-    }
-}
-
-function setReview(data) {
-    if (data && data.answer) {
+function onSetReview(data) {
+    if (data && typeof data.answer == 'string' && typeof data.quiz == 'string') {
+        questionArea_2.innerHTML = data.quiz;
         friendsGuess.innerText = data.answer;
         friendsAnswer = data.answer;
 
@@ -283,125 +234,49 @@ function setReview(data) {
 }
 
 // ✳️ Review Phase
-function submitReview(state) {
-    if (typeof state === 'boolean') {
-        myLastSubmittedReview = state; // <<< Store my review of friend's answer
-        isReviewedCurrentQuiz = true;
+function submitReview(score, reaction) {
+    if (typeof score === 'number') {
+        sendData('GameRoom:SubmitReview', { score: score, reaction: reaction });
         goToScreen('inGameWaitingScreen');
-        sendData('Review', { review: state }); // 'state' is my review of friend's answer
-
-        if (friendsReview !== null) { // friendsReview is friend's review of MY answer
-            onReviewResult({ reviewFromFriend: friendsReview });
-        }
     } else {
         showAlert("Please select Correct or Wrong", 'warning');
     }
 }
 
-function onReview(data) { // data.review IS friend's review of MY answer
-    if (isReviewedCurrentQuiz) {
-        onReviewResult({ reviewFromFriend: data.review });
-    } else {
-        friendsReview = data.review;
-    }
-}
-
-function onReviewResult(resultData) {
-    if (resultData && typeof resultData.reviewFromFriend === 'boolean') {
-        if(resultData.reviewFromFriend){ // If my friend said MY answer was correct
-            myScore++;
-        }
-
-        // Send 'ShowReviewResult' to my friend.
-        // It needs to contain:
-        // 1. MY current score (so friend can update their 'friendScore').
-        // 2. MY review of THEIR answer (so friend can display "You said I was [Correct/Wrong]").
-        //    This is stored in `myLastSubmittedReview`.
-        sendData('ShowReviewResult', {
-            friendsNewScore: myScore,                    // This is MY score, which will be the friend's 'friendScore'
-            howYouWereReviewedBySender: myLastSubmittedReview // This is MY review of my FRIEND's answer
-        });
-    } else {
-        console.warn("onReviewResult: Invalid data received", resultData);
-    }
-}
-
-function onShowReviewResult(data){
-    // data.friendsNewScore: This is my friend's actual score.
-    // data.howYouWereReviewedBySender: This is how my friend (the sender) reviewed MY (the receiver's) answer.
-    if (data && typeof data.howYouWereReviewedBySender === 'boolean' && typeof data.friendsNewScore === 'number') {
-        friendScore = data.friendsNewScore; // Update my local variable for my friend's score.
-
+function onSetMarks(data){
+    if (
+        data && 
+        typeof data.quiz === 'string' && 
+        typeof data.answer === 'string' && 
+        typeof data.lastReaction === 'string' && 
+        typeof data.lastAddedScore === 'number' && 
+        typeof data.score === 'number' && 
+        typeof data.otherScore === 'number' 
+    ) {
         const pName = playerName.split(' ');
         const fName = friendName.split(' ');
-        scoreHtml.innerText = `${pName[0]} : ${myScore} | ${fName[0]} : ${friendScore}`;
+        scoreHtml.innerText = `${pName[0]} : ${data.score} | ${fName[0]} : ${data.otherScore}`;
 
-        // This text should reflect how MY answer was judged by my FRIEND.
-        correctWrong.innerText = data.howYouWereReviewedBySender ? 'Correct! 🤪' : 'Wrong! 😕';
+        correctWrong.innerText = data.lastReaction + ' +' + data.lastAddedScore;
         goToScreen('correctWrongScreen');
     } else {
         console.warn("onShowReviewResult: Invalid data received", data);
     }
 }
 
-// ✳️ Redy Next Phase
+// ✳️ Ready Next Phase
 function submitReadyNextQuiz(){
-    sendData('ReadyNext', { readyNext: true });
-    isReadyForNextQuiz = true;
+    sendData('GameRoom:SubmitReadyNext', { readyNext: true });
     goToScreen('inGameWaitingScreen');
-
-    if(friendReadyForNextQuiz){
-        nextQuiz();
-    }
 }
 
-function onReadyNextQuiz(data){
-    friendReadyForNextQuiz = true;
-
-    if(isReadyForNextQuiz){
-        nextQuiz();
-    }
-}
-
-function nextQuiz(){
-    if(isHost){
-        generateQuiz();
-    }
-}
-
-function setWinner(){
-    let winnerPlayerName = null;
-    let isDraw = false;
-
-    if (myScore > friendScore) {
-        winnerPlayerName = playerName;
-    } else if (friendScore > myScore) {
-        winnerPlayerName = friendName;
-    } else {
-        isDraw = true;
-    }
-
-    const winnerData = { winner: winnerPlayerName, isDraw: isDraw };
-
-    sendData('Winner', winnerData);
-    setWinnerScreen(winnerData);
-}
-
-function onWinner(data){
-    if(data){
-        setWinnerScreen(data);
-    } else {
-        console.warn("onWinner: Invalid data received", data);
-    }
-}
-
-function setWinnerScreen(data){
+function onSetWinner(data){
     if (data.isDraw) {
         winnerIs.innerText = 'It\'s a Draw!';
         winnerName.innerText = 'You both played well!';
     } else {
         winnerIs.innerText = 'The Winner is';
-        winnerName.innerText = data.winner + ' 🥳';
+        winnerName.innerText = data.winner.name + ' 🥳';
     }
 
     for(let c = 0; c < 5; c++){
@@ -413,28 +288,22 @@ function setWinnerScreen(data){
     goToScreen('winnerScreen');
 }
 
+
 function requestRestart(){
-    sendData('RequestRestart', { restart: true });
+    sendData('GameRoom:RequestRestart', { restart: true });
     goToScreen('inGameWaitingScreen');
 }
 
-function onRestartRequest(data){
-    if(data && data.restart){
-        goToScreen('requestRestartScreen');
-    }
+function onRequestRestart(){
+    goToScreen('requestRestartScreen');
 }
 
 function acceptRestart(){
-    sendData('AcceptRestart', { restart: true });
-    if(isHost){
-        restart = true;
-        goToScreen('typeSelectionScreen');
-    }else{
-        goToScreen('inGameWaitingScreen');
-    }
+    sendData('GameRoom:AcceptRestart', { restart: true });
+    goToScreen('inGameWaitingScreen');
 }
 
-function onAcceptRestart(data){
+function onRestart(data){
     if(data && data.restart){
         if(isHost){
             restart = true;

@@ -66,7 +66,14 @@ section.active {
 }
 
 .plainText {
+  font-size: 1.5rem;
+  color: #000000;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.friendsGuess {
   font-size: 2rem;
+  margin-top: -1rem;
   margin-bottom: 1rem;
   color: #000000;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
@@ -78,8 +85,10 @@ section.active {
 
 .rowContent {
   display: flex;
-  flex-direction: row;
-  gap: 3rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  min-height: 200px;
 }
 
 .selectionContainer {
@@ -156,6 +165,12 @@ section.active {
 .button:active {
   transform: scale(1);
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.buttonReaction {
+  height: fit-content;
+  padding: 1rem 2rem;
+  color: #333;
 }
 
 .buttonGreen {
@@ -295,6 +310,15 @@ section.active {
     font-size: 2.5rem;
   }
 
+  .sectionTitle {
+    margin-bottom: 0.1rem;
+  }
+
+  .questionArea {
+    margin-top: 0;
+    font-size: 2.5rem;
+  }
+
   .button {
     font-size: 1rem;
     padding: 0.75rem 1.5rem;
@@ -302,7 +326,7 @@ section.active {
 
   .sectionTitle {
     margin-bottom: 1rem;
-    font-size: 1.4rem;
+    font-size: 1.5rem;
     text-align: center;
   }
 
@@ -327,9 +351,27 @@ section.active {
     font-size: 2rem;
   }
 
+  .sectionTitle {
+    margin-bottom: 0.1rem;
+  }
+
+  .questionArea {
+    font-size: 2rem;
+  }
+
   .button {
     padding: 0.6rem 1rem;
     font-size: 0.9rem;
+  }
+
+  .buttonReaction {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.75rem;
+  }
+
+  .rowContent {
+    gap: 0.5rem;
+    row-gap: 0.5rem;
   }
 
   .selectionContainer {

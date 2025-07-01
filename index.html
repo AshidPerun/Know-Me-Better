@@ -34,7 +34,7 @@
                     <!-- Buttons will be injected here -->
                 </div>
             </div>
-            <button class="button" onclick="goToScreen('quizNumberScreen')">
+            <button class="button" onclick="onContinueQuizType()">
                 Choose & Continue
             </button>
         </section>
@@ -91,9 +91,9 @@
             <div class="screenContent">
                 <h3 class="questionArea" id="questionArea_2">Here's a question...</h3>
                 <p class="plainText">Your Partner Guess this...</p>
-                <p id="friendsGuess" class="plainText"></p>
+                <p id="friendsGuess" class="friendsGuess"></p>
             </div>
-            <div class="rowContent">
+            <div id="reactionContainer" class="rowContent">
                 <button class="button buttonGreen" onclick="submitReview(true)">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                         class="bi bi-check-circle-fill" viewBox="0 0 16 16">
@@ -198,7 +198,9 @@
     <script src="./questions.js"></script>
     <script src="./questions_2.js"></script>
     <script src="./libs/peerjs.min.js"></script>
-    <script src="./connection.js"></script>
+    <script src="./libs/colyseus.js"></script>
+    <script src="./networkManager.js"></script>
+    <!-- <script src="./connection.js"></script> -->
     <script src="./cofetti.js"></script>
     <script src="./script.js"></script>
 </body>
