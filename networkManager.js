@@ -3,7 +3,7 @@ let clientSessionId = null;
 let currentRoom = null;
 let isHost = false;
 let connectionId = false;
-const DOMAIN = 'wss://knowmebetter.onrender.com'; // exposed in frontend
+const DOMAIN = 'https://know-me-better-server.onrender.com/'; // exposed in frontend
 
 async function connect(playerName) {
     //client = new Colyseus.Client('http://localhost:3001');
