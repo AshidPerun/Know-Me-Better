@@ -15,6 +15,7 @@ const quizNumbersContainer = document.getElementById('quizNumbersContainer');
 
 const quizLevels = 5;
 
+let isGameStarted = false;
 let currentScreenId = 'startScreen';
 let quizType = 0;
 let round = 1;
@@ -63,9 +64,13 @@ quizNumbersContainer.querySelectorAll('h3').forEach(item => {
 });
 
 function startGame() {
+    if(isGameStarted) return;
+    
     if (nameInput.value && nameInput.value.length <= 15) {
         playerName = nameInput.value;
         connect(playerName);
+        showAlert('Please Wait This will take a little time', 'info');
+        isGameStarted = true;
     }else if(nameInput.value.length > 15){
         showAlert('Name is Too Big!', 'warning');
     } else {
@@ -75,6 +80,7 @@ function startGame() {
 
 function setQuizTypes(data){
     if(data){
+        selectionContainer.innerHTML = '';
         Object.entries(data).forEach(([key, { label }]) => {
             const h3 = document.createElement('h3');
             h3.innerText = label;
@@ -202,7 +208,13 @@ function generateReactions(reactions){
 
         reactions.forEach((reaction) => {
             const button = document.createElement('button');
-            button.classList.add('button', 'buttonReaction');
+
+            if(reaction.className !== undefined){
+                button.classList.add('button', reaction.className);
+            }else{
+                button.classList.add('button', 'buttonReaction');
+            }
+            
             button.innerText = reaction.label + ' +' + reaction.points;
             button.onclick =  () => submitReview(Number(reaction.points), reaction.label);
 
