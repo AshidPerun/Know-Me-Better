@@ -6,8 +6,8 @@ let connectionId = false;
 const DOMAIN = 'https://know-me-better-server.onrender.com/'; // exposed in frontend
 
 async function connect(playerName) {
-    client = new Colyseus.Client('http://localhost:3001');
-    //client = new Colyseus.Client(DOMAIN);
+    //client = new Colyseus.Client('http://localhost:3001');
+    client = new Colyseus.Client(DOMAIN);
     
     const remoteConnectionId = checkConnectionID();
 
