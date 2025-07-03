@@ -12,6 +12,8 @@ const winnerIs = document.getElementById('winnerIs');
 const selectionContainer = document.getElementById('selectionContainer');
 const reactionContainer = document.getElementById('reactionContainer');
 const quizNumbersContainer = document.getElementById('quizNumbersContainer');
+const startButton = document.getElementById('startButton');
+const hostGame = document.getElementById('hostGame');
 
 const quizLevels = 5;
 
@@ -50,6 +52,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    const hasConnectionID = checkConnectionID();
+    if(hasConnectionID){
+        startButton.innerText = 'Join Game'
+
+        hostGame.style.display = 'block';
+        hostGame.onclick = () => {
+            const url = new URL(window.location.href);
+            url.searchParams.delete('connectionId');
+            window.history.replaceState({}, '', url);
+            window.location.reload();
+        }
+    }
+
+
     console.log(
         "%cOf course you can cheat... but why? 😊",
         "color: #ff4081; font-size: 16px; font-weight: bold;"
@@ -65,12 +81,13 @@ quizNumbersContainer.querySelectorAll('h3').forEach(item => {
 
 function startGame() {
     if(isGameStarted) return;
-    
+
     if (nameInput.value && nameInput.value.length <= 15) {
         playerName = nameInput.value;
         connect(playerName);
-        showAlert('Please Wait This will take a little time', 'info');
+        
         isGameStarted = true;
+        showAlert('Please wait this will take a little time', 'info', 3000);
     }else if(nameInput.value.length > 15){
         showAlert('Name is Too Big!', 'warning');
     } else {
@@ -182,7 +199,6 @@ function startQuiz() {
 
 function onNextQuiz(data){
     if(data){
-        generateReactions(data.reactions);
         setQuiz(data.quiz, data.round);
         askedQuestions.push(data.quiz);
     }
@@ -236,12 +252,15 @@ function submitAnswer() {
 }
 
 function onSetReview(data) {
-    if (data && typeof data.answer == 'string' && typeof data.quiz == 'string') {
+    if (data && typeof data.answer == 'string' && typeof data.quiz == 'string' && data.reactions.length > 0) {
         questionArea_2.innerHTML = data.quiz;
         friendsGuess.innerText = data.answer;
         friendsAnswer = data.answer;
 
+        generateReactions(data.reactions);
         goToScreen('reviewScreen');
+    }else{
+        console.log(data);
     }
 }
 

@@ -6,11 +6,10 @@ let connectionId = false;
 const DOMAIN = 'https://know-me-better-server.onrender.com/'; // exposed in frontend
 
 async function connect(playerName) {
-    //client = new Colyseus.Client('http://localhost:3001');
-    client = new Colyseus.Client(DOMAIN);
+    client = new Colyseus.Client('http://localhost:3001');
+    //client = new Colyseus.Client(DOMAIN);
     
-    const urlParams = new URLSearchParams(window.location.search);
-    const remoteConnectionId = urlParams.get('connectionId');
+    const remoteConnectionId = checkConnectionID();
 
     if (remoteConnectionId && remoteConnectionId !== connectionId) {
         client.joinById(remoteConnectionId, { name: playerName }).then((gameRoom) => {
@@ -33,6 +32,13 @@ async function connect(playerName) {
         });
 
     }
+}
+
+function checkConnectionID (){
+    const urlParams = new URLSearchParams(window.location.search);
+    const remoteConnectionId = urlParams.get('connectionId');
+
+    return remoteConnectionId;
 }
 
 function onRoomConnected(gameRoom) {
@@ -85,6 +91,10 @@ function onRoomConnected(gameRoom) {
     
     currentRoom.onMessage('Client:RequestRestart', (data) => {
         onRequestRestart(data);
+    });
+    
+    currentRoom.onMessage('Client:NoQuestions', (data) => {
+        showAlert('You asked all free Questions !');
     });
     
     onConnected();

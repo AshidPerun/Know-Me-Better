@@ -140,6 +140,28 @@ section.active {
   color: #000000;
 }
 
+#hostGame {
+  display: none;
+  font-size: 1rem;
+  margin-top: 1.5rem;
+  cursor: pointer;
+  transition: 0.2s;
+  font-weight: bold;
+}
+
+#hostGame::after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 2px;
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+}
+
+#hostGame:hover {
+  scale: 1.1;
+}
+
 /* Button Style */
 .button {
   background-color: #ffffff;
