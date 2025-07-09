@@ -5,7 +5,7 @@ let isHost = false;
 let connectionId = false;
 const DOMAIN_GLOBLE = 'https://know-me-better-server.onrender.com/'; // exposed in frontend
 const DOMAIN_LOCAL = 'http://localhost:3001';
-const DOMAIN = DOMAIN_LOCAL;
+const DOMAIN = DOMAIN_GLOBLE;
 
 async function connect(playerName) {
     client = new Colyseus.Client(DOMAIN);
