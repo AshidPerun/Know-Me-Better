@@ -3,10 +3,11 @@ let clientSessionId = null;
 let currentRoom = null;
 let isHost = false;
 let connectionId = false;
-const DOMAIN = 'https://know-me-better-server.onrender.com/'; // exposed in frontend
+const DOMAIN_GLOBLE = 'https://know-me-better-server.onrender.com/'; // exposed in frontend
+const DOMAIN_LOCAL = 'http://localhost:3001';
+const DOMAIN = DOMAIN_LOCAL;
 
 async function connect(playerName) {
-    //client = new Colyseus.Client('http://localhost:3001');
     client = new Colyseus.Client(DOMAIN);
     
     const remoteConnectionId = checkConnectionID();
@@ -15,6 +16,7 @@ async function connect(playerName) {
         client.joinById(remoteConnectionId, { name: playerName }).then((gameRoom) => {
             isHost = false;
             onRoomConnected(gameRoom);
+            enableFeedBack(true);
             console.log("joined successfully", gameRoom);
         }).catch(e => {
             showAlert('Cannot join room. It may have expired.', 'error', 10000);
@@ -25,6 +27,7 @@ async function connect(playerName) {
         client.create("GameRoom", { name: playerName, isHost: true }).then((gameRoom) => {
             isHost = true;
             onRoomConnected(gameRoom);
+            enableFeedBack(true);
             console.log("joined successfully", gameRoom);
         }).catch(e => {
             showAlert('Cannot create room. Please try again later.', 'error', 10000);

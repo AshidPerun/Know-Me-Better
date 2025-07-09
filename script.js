@@ -20,6 +20,7 @@ const quizLevels = 5;
 let isGameStarted = false;
 let currentScreenId = 'startScreen';
 let quizType = 0;
+let quizTypes = [];
 let round = 1;
 let restart = false;
 let MAX_ROUNDS = 5;
@@ -70,6 +71,8 @@ document.addEventListener('DOMContentLoaded', () => {
         "%cOf course you can cheat... but why? 😊",
         "color: #ff4081; font-size: 16px; font-weight: bold;"
     );
+
+    enableFeedBack(false);
 });
 
 quizNumbersContainer.querySelectorAll('h3').forEach(item => {
@@ -98,9 +101,10 @@ function startGame() {
 function setQuizTypes(data){
     if(data){
         selectionContainer.innerHTML = '';
-        Object.entries(data).forEach(([key, { label }]) => {
+        quizTypes = data;
+        Object.entries(data).forEach(([key, { label, isReward }]) => {
             const h3 = document.createElement('h3');
-            h3.innerText = label;
+            h3.innerHTML = isReward ? label + Icons.video('#6500c9', 20, 20, '0 0 0 8px') : label;
             h3.onclick = () => onTypeSelect(Number(key));
             
             selectionContainer.appendChild(h3);
@@ -119,7 +123,7 @@ function setQuizTypes(data){
 
 function onConnected() {
     if (!isHost) {
-        goToScreen('inGameWaitingScreen'); // Wait for quiz from host 
+        goToScreen('inGameWaitingScreen'); // Wait for quiz from host
     }
 }
 
@@ -129,7 +133,25 @@ function onContinueQuizType(){
         return;
     }
 
-    goToScreen('quizNumberScreen')
+    const data = quizTypes[quizType];
+    const isReward = data.isReward;
+    const isAdult = data.isAdult;
+
+    if(isReward){
+        if(isAdult){
+            showConform("This pack is intended for adults only. Are you 18 or older?", 
+                () => {
+                    showMidroll(() => { goToScreen('quizNumberScreen'); });
+                }, 
+                () => {
+                    console.log('Cancelled');
+                });
+        }else{
+            showMidroll(() => { goToScreen('quizNumberScreen'); });
+        }
+    }else{
+        goToScreen('quizNumberScreen');
+    }
 }
 
 function onGameSetup() {
@@ -231,8 +253,8 @@ function generateReactions(reactions){
                 button.classList.add('button', 'buttonReaction');
             }
             
-            button.innerText = reaction.label + ' +' + reaction.points;
-            button.onclick =  () => submitReview(Number(reaction.points), reaction.label);
+            button.innerHTML = reaction.isReward ?  reaction.label + ' +' + reaction.points + Icons.video('#6500c9', 20, 20, '0 0 0 8px') : reaction.label + ' +' + reaction.points;
+            button.onclick =  () => beforeSubmitReview(Number(reaction.points), reaction.label, reaction.isReward);
 
             reactionContainer.appendChild(button);
         });
@@ -265,7 +287,15 @@ function onSetReview(data) {
 }
 
 // ✳️ Review Phase
-function submitReview(score, reaction) {
+function beforeSubmitReview(score, reaction, isReward = false) {
+    if(isReward){
+        showMidroll(() => { submitReview(score, reaction); });
+    }else{
+        submitReview(score, reaction);
+    }
+}
+
+function submitReview(score, reaction){
     if (typeof score === 'number') {
         sendData('GameRoom:SubmitReview', { score: score, reaction: reaction });
         goToScreen('inGameWaitingScreen');
@@ -343,7 +373,96 @@ function onRestart(data){
     }
 }
 
+// function  register() {
+//     const email = document.getElementById('registerEmail').value.trim();
+//     const password = document.getElementById('registerPassword').value.trim();
+//     const username = document.getElementById('registerUsername').value.trim();
+
+//     const data = {
+//         email: email,
+//         username: username,
+//         password: password
+//     };
+
+//     fetch(`${DOMAIN}/api/users/register`, {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json'
+//         },
+//         body: JSON.stringify(data)
+//     })
+//     .then(async (response) => {
+//         if (!response.ok) {
+//             const errorData = await response.json();
+//             throw new Error(errorData.message || 'Failed to register');
+//         }
+//         return response.json();
+//     })
+//     .then(data => {
+//         showAlert(data.message, 'succes');
+//         goToScreen('startScreen');
+//     })
+//     .catch(error => {
+//         showAlert(error.message, 'error');
+//         console.error('Error:', error.message);
+//     });
+// }
+
+// function login(){
+//     const email = document.getElementById('emailInput').value.trim();
+//     const password = document.getElementById('passwordInput').value.trim();
+
+//     const data = {
+//         email: email,
+//         password: password
+//     };
+
+//     fetch(`${DOMAIN}/api/users/login`, {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json'
+//         },
+//         body: JSON.stringify(data)
+//     })
+//     .then(async (response) => {
+//         if (!response.ok) {
+//             const errorData = await response.json();
+//             throw new Error(errorData.message || 'Failed to register');
+//         }
+//         return response.json();
+//     })
+//     .then(data => {
+//         showAlert(data.message, 'succes');
+//         goToScreen('startScreen');
+//     })
+//     .catch(error => {
+//         showAlert(error.message, 'error');
+//         console.error('Error:', error.message);
+//     });
+// }
+
+
+
 //Helpers
+
+
+
+function showMidroll(callBack){
+    const options = {
+        apiKey: "7d6523f3-96c1-4377-966f-46167b1e3e28", // Replace with your actual API key
+        injectionElementId: "adPlacement", // This is the ID of the div from step 2.
+        adStatusCallbackFn: (status) => {
+            callBack();
+        },
+        adErrorCallbackFn: (error) => { 
+            callBack();
+            console.log("Error: ", error.getError().data);
+        },
+    };
+
+    initializeAndOpenPlayer(options);
+}
+
 function goToScreen(toId) {
     const fromScreen = document.getElementById(currentScreenId) || null;
     const toScreen = document.getElementById(toId);
@@ -419,3 +538,107 @@ function showAlert(message = "Success!", type = 'info', duration = 2000) {
     previousAlertTimeout = null;
   }, duration);
 }
+
+function togglePassword(inputId, iconElement) {
+    const input = document.getElementById(inputId);
+    const isPassword = input.type === 'password';
+
+    input.type = isPassword ? 'text' : 'password';
+
+    if(isPassword){
+      iconElement.innerHTML = ` <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7 7 0 0 0 2.79-.588M5.21 3.088A7 7 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474z"/>
+                                <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12z"/>
+                                `;
+    }else{
+        iconElement.innerHTML = ` <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0" />
+                                    <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7" />
+                                    `;
+    }
+}
+
+
+const Icons = {
+  video: (color, width = 16, height = 16, margin = '0 8px 0 0') => {
+    return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" fill="${color}" style="margin: ${margin}; vertical-align: middle;" class="bi bi-play-btn-fill" viewBox="0 0 16 16">
+      <path d="M0 12V4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2m6.79-6.907A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814z"/>
+    </svg>`;
+  }
+}
+
+function showConform(message, onYes, onNo) {
+  const conform = document.getElementById('conform');
+  const msg = document.getElementById('conform-message');
+  const yesBtn = document.getElementById('conform-yes');
+  const noBtn = document.getElementById('conform-no');
+
+  msg.textContent = message;
+  conform.classList.remove('hidden');
+
+  function cleanup() {
+    conform.classList.add('hidden');
+    yesBtn.removeEventListener('click', handleYes);
+    noBtn.removeEventListener('click', handleNo);
+  }
+
+  function handleYes() {
+    cleanup();
+    if (onYes) onYes();
+  }
+
+  function handleNo() {
+    cleanup();
+    if (onNo) onNo();
+  }
+
+  yesBtn.addEventListener('click', handleYes);
+  noBtn.addEventListener('click', handleNo);
+}
+
+const toggleBtn = document.getElementById('feedback-toggle');
+const form = document.getElementById('feedback-form');
+const sendBtn = document.getElementById('feedback-send');
+const textarea = document.getElementById('feedback-text');
+const container = document.getElementById('feedback-container');
+
+toggleBtn.addEventListener('click', () => {
+    if(form.classList.contains('hidden')){
+        form.classList.replace('hidden', 'flex')
+    }else{
+        form.classList.replace('flex', 'hidden');
+    }
+});
+
+function enableFeedBack(state){
+    if(state){
+        if(toggleBtn.classList.contains('hidden')){
+            toggleBtn.classList.replace('hidden', 'flex')
+        }else{
+            toggleBtn.classList.add('flex');
+        }
+    }else{
+        if(toggleBtn.classList.contains('flex')){
+            toggleBtn.classList.replace('flex', 'hidden');
+        }else{
+            toggleBtn.classList.add('hidden');
+        }
+    }
+}
+
+sendBtn.addEventListener('click', () => {
+  const message = textarea.value.trim();
+  if (message) {
+    sendData('GameRoom:FeedBack', { message });
+    textarea.value = '';
+    form.classList.add('hidden');
+    showAlert("Thanks for your feedback!", "success");
+    form.classList.replace('flex', 'hidden');
+  }
+});
+
+document.addEventListener('click', (event) => {
+  if (!container.contains(event.target) && form.classList.contains('flex')) {
+    form.classList.replace('flex', 'hidden');
+  }
+});
+
+

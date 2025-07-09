@@ -13,9 +13,20 @@
         rel="stylesheet">
 
     <link rel="stylesheet" href="style.css">
+    <link rel="text" href="https://cdn.applixir.com/ads.txt">
 </head>
 
 <body>
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="/" class="app-name">knowmebetter.io</a>
+        </div>
+        <!-- <div class="nav-right">
+            <a onclick="goToScreen('loginScreen')" class="nav-button">Login</a>
+            <a onclick="goToScreen('registerScreen')" class="nav-button">Sign Up</a>
+        </div> -->
+    </nav>
+
     <main id="appContainer"> <!-- ADDED THIS WRAPPER -->
         <section id="startScreen" class="active">
             <h3 class="mainTitle">Know Me Better</h3>
@@ -30,6 +41,67 @@
                 Create a Game
             </a>
         </section>
+        <!-- <section id="loginScreen">
+            <h3 class="sectionTitle">Login</h3>
+            <div class="screenContent">
+                <div class="inputWrapper">
+                    <label for="emailInput">Email</label>
+                    <input autocomplete="off" type="email" id="emailInput" placeholder="Enter your email" />
+                </div>
+
+                <div class="inputWrapper passwordField">
+                    <label for="passwordInput">Password</label>
+                    <div class="inputWithIcon">
+                        <input type="password" id="passwordInput" placeholder="Create a password" />
+                        <svg class="togglePassword" onclick="togglePassword('passwordInput', this)"
+                            xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                            class="bi bi-eye-fill" viewBox="0 0 16 16">
+                            <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0" />
+                            <path
+                                d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7" />
+                        </svg>
+                    </div>
+                </div>
+
+                <button class="button" onclick="login()">Login</button>
+                <p style="margin-top: 10px; font-size: 14px;">
+                    Don't have an account? <a href="#" onclick="goToScreen('registerScreen')">Register</a>
+                </p>
+            </div>
+        </section>
+        <section id="registerScreen">
+            <h3 class="sectionTitle">Create Account</h3>
+            <div class="screenContent">
+                <div class="inputWrapper">
+                    <label for="registerUsername">Username</label>
+                    <input autocomplete="off" type="text" id="registerUsername" placeholder="Your display name" />
+                </div>
+
+                <div class="inputWrapper">
+                    <label for="registerEmail">Email</label>
+                    <input autocomplete="off" type="email" id="registerEmail" placeholder="Enter your email" />
+                </div>
+
+                <div class="inputWrapper passwordField">
+                    <label for="registerPassword">Password</label>
+                    <div class="inputWithIcon">
+                        <input type="password" id="registerPassword" placeholder="Create a password" />
+                        <svg class="togglePassword" onclick="togglePassword('registerPassword', this)"
+                            xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                            class="bi bi-eye-fill" viewBox="0 0 16 16">
+                            <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0" />
+                            <path
+                                d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7" />
+                        </svg>
+                    </div>
+                </div>
+
+                <button class="button" onclick="register()">Register</button>
+                <p style="margin-top: 10px; font-size: 14px;">
+                    Already have an account? <a href="#" onclick="goToScreen('loginScreen')">Login</a>
+                </p>
+            </div>
+        </section> -->
         <section id="typeSelectionScreen">
             <h3 class="sectionTitle">Select Quiz Type</h3>
             <div class="screenContent">
@@ -92,7 +164,7 @@
         <section id="reviewScreen">
             <h3 class="sectionTitle">Review Your Answers</h3>
             <div class="screenContent">
-                <h3 class="questionArea" id="questionArea_2">Here's a question...</h3>
+                <h3 class="questionArea fit-me" id="questionArea_2">Here's a question...</h3>
                 <p class="plainText">Your Partner Guess this...</p>
                 <p id="friendsGuess" class="friendsGuess"></p>
             </div>
@@ -197,6 +269,31 @@
     <div id="alertBox" class="alert">
         Copied to clipboard!
     </div>
+
+    <div id="conform" class="conform hidden">
+        <div class="popup">
+            <p id="conform-message"></p>
+            <div class="buttons">
+                <button class="button" id="conform-yes">Yes</button>
+                <button class="button" id="conform-no">No</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="feedback-container">
+        <button id="feedback-toggle">💬 Feedback</button>
+        <div id="feedback-form" class="hidden">
+            <textarea id="feedback-text" placeholder="Your feedback..."></textarea>
+            <button class="button" id="feedback-send">Send</button>
+        </div>
+    </div>
+
+
+    <div id="adPlacement" class="adPlacement">
+
+    </div>
+
+    <script type="text/javascript" src="https://cdn.applixir.com/applixir.app.v6.0.1.js"></script>
 
     <script src="./questions.js"></script>
     <script src="./questions_2.js"></script>
