@@ -3,9 +3,9 @@ let clientSessionId = null;
 let currentRoom = null;
 let isHost = false;
 let connectionId = false;
-const DOMAIN_GLOBLE = 'https://know-me-better-server.onrender.com/'; // exposed in frontend
+const DOMAIN_GLOBLE = 'https://knowmebetter.io/colyseus/'; // exposed in frontend
 const DOMAIN_LOCAL = 'http://localhost:3001';
-const DOMAIN = DOMAIN_GLOBLE;
+const DOMAIN = DOMAIN_LOCAL;
 
 async function connect(playerName) {
     client = new Colyseus.Client(DOMAIN);

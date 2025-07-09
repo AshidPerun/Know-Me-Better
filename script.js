@@ -446,18 +446,22 @@ function onRestart(data){
 //Helpers
 
 
-
+//https://knowmebetter.io/applixir-callback
 function showMidroll(callBack){
     const options = {
         apiKey: "7d6523f3-96c1-4377-966f-46167b1e3e28", // Replace with your actual API key
         injectionElementId: "adPlacement", // This is the ID of the div from step 2.
+        customParams: {
+            sessionId: client.sessionId,
+            roomId: connectionId
+        },
         adStatusCallbackFn: (status) => {
             callBack();
         },
         adErrorCallbackFn: (error) => { 
             callBack();
             console.log("Error: ", error.getError().data);
-        },
+        }
     };
 
     initializeAndOpenPlayer(options);
